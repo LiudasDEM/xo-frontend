@@ -66,20 +66,22 @@ export function useProvideGame() {
 	}, [board])
 
 	const selectCrossOnCell = useCallback(function selectCrossOnCell(x, y) {
+		if (gameHasEnded) { return }
 		if (turn !== 'X') { return }
 		if (!canMarkCell(x, y)) { return }
 
 		board[x][y] = 'X'
 		setBoard([...board])
-	}, [board, turn, canMarkCell])
+	}, [board, turn, canMarkCell, gameHasEnded])
 
 	const selectNoughtOnCell = useCallback(function selectNoughtOnCell(x, y) {
+		if (gameHasEnded) { return }
 		if (turn !== 'O') { return }
 		if (!canMarkCell(x, y)) { return }
 
 		board[x][y] = 'O'
 		setBoard([...board])
-	}, [board, turn, canMarkCell])
+	}, [board, turn, canMarkCell, gameHasEnded])
 
 	useEffect(() => {
 		function invertMatrix(matrix) {

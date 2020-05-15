@@ -28,55 +28,45 @@ function Layout() {
 	return <Fade in>
 		<Container style={{ marginTop: '20px' }}>
 			<Row>
-				{
-					gameHasEnded
-						? <Col md={{ span: 6, offset: 3 }} lg={6}>
-							<Card>
-								<Card.Body>
-									<Card.Title>
-										{
-											winner
-												? <>Player {winner} has won:</>
-												: <>The game has ended in a draw</>
-										}
-									</Card.Title>
-									<Board board={board} select={() => { }} />
-								</Card.Body>
-							</Card>
-						</Col>
-						: <>
-							<Col md={6} lg={6}>
-								<Card>
-									<Card.Body>
-										<Card.Title>
-											Player 1
-										</Card.Title>
-										{!playerOneReady &&
-											<Button variant="danger" onClick={() => { setPlayerOneReady(true); showAlert('Player one is ready') }}>Start</Button>}
-									</Card.Body>
-								</Card>
-							</Col>
-							<Col md={6} lg={6}>
-								<Card>
-									<Card.Body>
-										<Card.Title>
-											Player 2
-										</Card.Title>
-										{!playerTwoReady &&
-											<Button variant="danger" onClick={() => { setPlayerTwoReady(true); showAlert('Player two is ready') }}>Start</Button>}
-									</Card.Body>
-								</Card>
-							</Col>
-						</>
-				}
-				{
-					gameHasStarted && !gameHasEnded &&
-					<Col md={{ span: 6, offset: 3 }} lg={6}>
+
+				{!gameHasStarted && <>
+					<Col md={6} lg={6}>
 						<Card>
 							<Card.Body>
+								<Card.Title>
+									Player X
+								</Card.Title>
+								{!playerOneReady &&
+									<Button variant="danger" onClick={() => { setPlayerOneReady(true); showAlert('Player X is ready') }}>Start</Button>}
+							</Card.Body>
+						</Card>
+					</Col>
+					<Col md={6} lg={6}>
+						<Card>
+							<Card.Body>
+								<Card.Title>
+									Player O
+								</Card.Title>
+								{!playerTwoReady &&
+									<Button variant="danger" onClick={() => { setPlayerTwoReady(true); showAlert('Player O is ready') }}>Start</Button>}
+							</Card.Body>
+						</Card>
+					</Col></>}
+				{gameHasStarted &&
+					<Col md={{ span: 4, offset: 4 }} lg={3} style={{ marginTop: '20px' }}>
+						<Card>
+							<Card.Body>
+								<Card.Title>
+									{
+										gameHasEnded && winner
+											? <>Player {winner} has won:</>
+											: <>The game has ended in a draw</>
+									}
+								</Card.Title>
 								<Board
-									symbol={turn}
-									select={turn === 'X' ? selectCrossOnCell : selectNoughtOnCell}
+									select={turn === 'X'
+										? selectCrossOnCell
+										: selectNoughtOnCell}
 									board={board}
 								/>
 							</Card.Body>

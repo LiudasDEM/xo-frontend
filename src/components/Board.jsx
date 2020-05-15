@@ -5,13 +5,13 @@ import PropTypes from 'prop-types'
 import { Table } from 'react-bootstrap'
 
 
-function Board({ board, symbol, select }) {
-	return <Table>
+function Board({ board, select }) {
+	return <Table bordered>
 		<tbody>
 			{board.map((row, i) => <tr key={i}>
 				{row.map((cell, j) => <td
-					onClick={() => select(i, j)} style={{ color: cell && symbol && (cell === symbol ? 'green' : 'red') }} key={j}>
-					{cell ? cell : '[]'}
+					onClick={() => select(i, j)} key={j}>
+					{cell}
 				</td>)}
 			</tr>)}
 		</tbody>
@@ -21,7 +21,6 @@ function Board({ board, symbol, select }) {
 
 Board.propTypes = {
 	board: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-	symbol: PropTypes.oneOf(['X', 'O']),
 	select: PropTypes.func.isRequired,
 }
 
