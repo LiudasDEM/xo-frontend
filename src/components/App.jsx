@@ -8,19 +8,24 @@ import Layout from './Layout'
 
 
 import { useAlerts } from '../contexts/AlertsContext'
+import { useGame } from '../contexts/GameContext'
 
 
 function App() {
-	const { alerts, removeAlert, showAlert } = useAlerts()
+	const { alerts, removeAlert } = useAlerts()
+	const { turn, gameHasStarted, gameHasEnded } = useGame()
 
 	return <Fade in>
 		<Container>
 			<ErrorBoundary>
-				<h1>Lets play some <strong onClick={() => { showAlert('Let\'s gooo') }}>tick tack toe</strong></h1>
+				<h1>Lets play some tick tack toe!</h1>
+				<h2>{gameHasStarted && !gameHasEnded && <>Player&apos;s <strong>{turn}</strong> turn</>}</h2>
+				<h2>{!gameHasStarted && !gameHasEnded && <>Waiting for players to start the game</>}</h2>
+				<h2>{gameHasEnded && <>Game over!</>}</h2>
 				<Layout />
 			</ErrorBoundary>
 			<Row style={{ marginTop: '20px' }}>
-				<Col md={{ span: 3, offset: 9 }} lg={2}>
+				<Col md={{ span: 3, offset: 9 }} lg={3}>
 					<div className="alert-box">
 						{alerts.map((alert, i) => (
 							<Alert

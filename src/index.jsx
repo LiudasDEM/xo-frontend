@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { ProvideAlerts } from './contexts/AlertsContext'
+import { ProvideGame } from './contexts/GameContext'
+
 import App from './components/App'
 
 
@@ -18,7 +20,9 @@ window.addEventListener('error', window._logError)
 
 
 const jsx = <ProvideAlerts>
-	<App />
+	<ProvideGame>
+		<App />
+	</ProvideGame>
 </ProvideAlerts>
 
 
