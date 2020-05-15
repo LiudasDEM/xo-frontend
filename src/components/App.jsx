@@ -3,6 +3,9 @@ import React from 'react'
 import { Fade, Container, Row, Col, Card } from 'react-bootstrap'
 
 
+import ErrorBoundary from './ErrorBoundary'
+
+
 function App() {
 	return <Fade in>
 		<Container style={{ marginTop: '20px' }}>
@@ -13,7 +16,9 @@ function App() {
 							<Card.Title>
 								Player 1
 							</Card.Title>
-							Player 1 board
+							<ErrorBoundary>
+								Player 1 board
+							</ErrorBoundary>
 						</Card.Body>
 					</Card>
 				</Col>
@@ -23,7 +28,9 @@ function App() {
 							<Card.Title>
 								Player 2
 							</Card.Title>
-							Player 2 board
+							<ErrorBoundary>
+								Player 2 board
+							</ErrorBoundary>
 						</Card.Body>
 					</Card>
 				</Col>
@@ -35,7 +42,9 @@ function App() {
 							<Card.Title>
 								Logs
 							</Card.Title>
-							Table
+							<ErrorBoundary>
+								Table
+							</ErrorBoundary>
 						</Card.Body>
 					</Card>
 				</Col>
