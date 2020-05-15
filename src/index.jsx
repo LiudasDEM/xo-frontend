@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-
+import { ProvideAlerts } from './contexts/AlertsContext'
 import App from './components/App'
-import ErrorBoundary from './components/ErrorBoundary'
 
 
 window._logError = function (event) {
@@ -18,4 +17,9 @@ window._logError = function (event) {
 window.addEventListener('error', window._logError)
 
 
-ReactDOM.render(<ErrorBoundary><App /></ErrorBoundary>, document.getElementById('app'))
+const jsx = <ProvideAlerts>
+	<App />
+</ProvideAlerts>
+
+
+ReactDOM.render(jsx, document.getElementById('app'))
