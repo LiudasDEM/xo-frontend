@@ -1,7 +1,9 @@
 /* global require module __dirname process */
 
 const path = require('path')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -36,6 +38,25 @@ module.exports = {
 				loader: 'babel-loader',
 			},
 			{
+				test: /\.scss$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					'css-loader',
+					'sass-loader',
+				],
+			},
+			{
+				test: /\.css$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					'css-loader',
+				],
+			},
+			{
 				test: /\.svg$/,
 				use: [
 					{
@@ -49,6 +70,9 @@ module.exports = {
 		],
 	},
 	plugins: [
+		new MiniCssExtractPlugin({
+			filename: '[name].bundle.css?v=[chunkhash]',
+		}),
 		new HtmlWebpackPlugin({
 			template: './src/index.html',
 		}),
