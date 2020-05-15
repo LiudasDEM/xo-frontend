@@ -1,0 +1,10 @@
+{
+	"presets": [
+		"@babel/preset-react"
+	],
+	"plugins": [
+		"inline-react-svg",
+		"@babel/plugin-transform-spread",
+		"@babel/plugin-proposal-object-rest-spread"
+	]
+}

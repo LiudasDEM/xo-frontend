@@ -1,0 +1,42 @@
+{
+  "name": "xo-frontend",
+  "version": "1.0.0",
+  "description": "tic-tac-toe frontend",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --watch --open",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LiudasDEM/xo-frontend.git"
+  },
+  "keywords": [
+    "tic-tac-toe",
+    "frontend"
+  ],
+  "author": "LiudasDEM",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/LiudasDEM/xo-frontend/issues"
+  },
+  "homepage": "https://github.com/LiudasDEM/xo-frontend#readme",
+  "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
+    "@babel/plugin-transform-spread": "^7.8.3",
+    "@babel/preset-react": "^7.9.4",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.2",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-svg-loader": "^3.0.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
