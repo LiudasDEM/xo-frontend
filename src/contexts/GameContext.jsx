@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
+import http from '../http'
+import { buildQuery } from '../util'
+
+import { useAlerts } from './AlertsContext'
 
 const GameContext = createContext()
 
@@ -22,10 +26,16 @@ export function useGame() {
 
 
 export function useProvideGame() {
+	const { showAlert } = useAlerts()
+
 	const [playerOneReady, setPlayerOneReady] = useState(false)
 	const [playerTwoReady, setPlayerTwoReady] = useState(false)
 	const [gameHasStarted, setGameHasStarted] = useState(false)
 	const [gameHasEnded, setGameHasEnded] = useState(false)
+
+	const [game, setGame] = useState(null)
+	const [events, setEvents] = useState([])
+
 	const [winner, setWinner] = useState()
 
 	const [turn, setTurn] = useState()
@@ -34,6 +44,32 @@ export function useProvideGame() {
 		['', '', ''],
 		['', '', ''],
 	])
+
+	const reloadEvents = useCallback(function reloadEvents(gameId) {
+		http.get(`/api/games/${gameId || game._id}/events?${buildQuery({
+			select: 'createdAt row column action player',
+			page: 0, size: 20,
+		})}`).then(res => {
+			setEvents(res.data)
+		}, showAlert)
+	}, [game, showAlert])
+
+	const loadGame = useCallback(function loadGame(id) {
+		return http.get(`/api/games/${id}?${buildQuery({
+			select: 'createdAt status modifiedAt winner',
+		})}`).then(res => {
+			setGame(res.data)
+			return res.data._id
+		}, showAlert)
+	}, [showAlert])
+
+	const createGame = useCallback(function createGame() {
+		return http.post('/api/games').then(res => {
+			loadGame(res.headers.get('location').split('/').pop())
+				.then(reloadEvents)
+		}, showAlert)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loadGame, showAlert, reloadEvents])
 
 	const resetEverything = useCallback(function resetEverything() {
 		setPlayerOneReady(false)
@@ -47,7 +83,59 @@ export function useProvideGame() {
 			['', '', ''],
 			['', '', ''],
 		])
+		setGame(null)
+		setEvents([])
+		createGame()
+	}, [createGame])
+
+	useEffect(() => {
+		if (!gameHasEnded) {
+			return
+		}
+		http.post(`/api/games/${game._id}/finished`, {
+			board, winner: !winner ? 'tie' : `Player ${winner}`,
+		}).then(res => {
+			loadGame(res.headers.get('location').split('/').pop())
+				.then(reloadEvents)
+		}, showAlert)
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [showAlert, loadGame, gameHasEnded])
+
+	useEffect(() => {
+		createGame()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	useEffect(() => {
+		if (!playerOneReady) {
+			return
+		}
+
+		http.post('/api/events', {
+			action: 'started',
+			player: 'Player X',
+			row: 0, column: 0,
+			game: game._id,
+		}).then(() => reloadEvents(), showAlert)
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [showAlert, playerOneReady])
+
+	useEffect(() => {
+		if (!playerTwoReady) {
+			return
+		}
+
+		http.post('/api/events', {
+			action: 'started',
+			player: 'Player O',
+			row: 0, column: 0,
+			game: game._id,
+		}).then(() => reloadEvents(), showAlert)
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [showAlert, playerTwoReady])
 
 	useEffect(() => {
 		if (gameHasStarted) {
@@ -86,7 +174,14 @@ export function useProvideGame() {
 
 		board[x][y] = 'X'
 		setBoard([...board])
-	}, [board, turn, canMarkCell, gameHasEnded])
+
+		http.post('/api/events', {
+			action: 'checked',
+			player: 'Player X',
+			row: x, column: y,
+			game: game._id,
+		}).then(() => reloadEvents(), showAlert)
+	}, [board, turn, canMarkCell, gameHasEnded, game, reloadEvents, showAlert])
 
 	const selectNoughtOnCell = useCallback(function selectNoughtOnCell(x, y) {
 		if (gameHasEnded) { return }
@@ -95,7 +190,14 @@ export function useProvideGame() {
 
 		board[x][y] = 'O'
 		setBoard([...board])
-	}, [board, turn, canMarkCell, gameHasEnded])
+
+		http.post('/api/events', {
+			action: 'checked',
+			player: 'Player O',
+			row: x, column: y,
+			game: game._id,
+		}).then(() => reloadEvents(), showAlert)
+	}, [board, turn, canMarkCell, gameHasEnded, game, reloadEvents, showAlert])
 
 	useEffect(() => {
 		function invertMatrix(matrix) {
@@ -162,6 +264,6 @@ export function useProvideGame() {
 		turn, board, gameHasStarted,
 		winner, gameHasEnded,
 		selectCrossOnCell, selectNoughtOnCell,
-		resetEverything,
+		resetEverything, game, events,
 	}
 }

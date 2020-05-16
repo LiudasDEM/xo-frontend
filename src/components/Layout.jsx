@@ -16,7 +16,6 @@ import { useGame } from '../contexts/GameContext'
 function Layout() {
 	const { showAlert } = useAlerts()
 
-
 	const {
 		playerOneReady, setPlayerOneReady,
 		playerTwoReady, setPlayerTwoReady,
@@ -28,7 +27,6 @@ function Layout() {
 	return <Fade in>
 		<Container style={{ marginTop: '20px' }}>
 			<Row>
-
 				{!gameHasStarted && <>
 					<Col md={6} lg={6}>
 						<Card>

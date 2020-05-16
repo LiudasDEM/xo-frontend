@@ -1,6 +1,4 @@
 
-import fetch from 'fetch'
-
 export async function get(url, options = {}) {
 	return await request(url, undefined, { method: 'GET', ...options })
 }
