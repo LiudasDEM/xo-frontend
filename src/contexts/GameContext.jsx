@@ -35,6 +35,20 @@ export function useProvideGame() {
 		['', '', ''],
 	])
 
+	const resetEverything = useCallback(function resetEverything() {
+		setPlayerOneReady(false)
+		setPlayerTwoReady(false)
+		setGameHasStarted(false)
+		setGameHasEnded(false)
+		setWinner()
+		setTurn()
+		setBoard([
+			['', '', ''],
+			['', '', ''],
+			['', '', ''],
+		])
+	}, [])
+
 	useEffect(() => {
 		if (gameHasStarted) {
 			setTurn(t => t === 'X' ? 'O' : 'X')
@@ -148,5 +162,6 @@ export function useProvideGame() {
 		turn, board, gameHasStarted,
 		winner, gameHasEnded,
 		selectCrossOnCell, selectNoughtOnCell,
+		resetEverything,
 	}
 }
