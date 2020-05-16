@@ -20,7 +20,7 @@ function Layout() {
 		playerOneReady, setPlayerOneReady,
 		playerTwoReady, setPlayerTwoReady,
 		board, winner, gameHasEnded,
-		gameHasStarted, turn,
+		gameHasStarted, turn, events, game,
 		selectCrossOnCell, selectNoughtOnCell,
 	} = useGame()
 
@@ -77,10 +77,10 @@ function Layout() {
 					<Card>
 						<Card.Body>
 							<Card.Title>
-								Logs
+								Events
 							</Card.Title>
 							<ErrorBoundary>
-								<Table />
+								<Table items={events} game={game}/>
 							</ErrorBoundary>
 						</Card.Body>
 					</Card>
