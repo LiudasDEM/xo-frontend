@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  xo-frontend:
+      container_name: xo-frontend
+      image: xo-frontend
+      build: .
+      ports:
+        - 80:80
+      external_links:
+        - xo-backend: backend
+volumes:
+    elk:
+    mongo:
