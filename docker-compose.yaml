@@ -8,7 +8,10 @@ services:
       ports:
         - 80:80
       external_links:
-        - xo-backend: backend
-volumes:
-    elk:
-    mongo:
+        - xo-backend:xo-backend
+      networks:
+        - xo-network
+networks:
+  xo-network:
+    name: xo-network
+    driver: bridge
